@@ -1,0 +1,27 @@
+{
+  "name": "blockgrade-source-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blockgrade/source-code.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blockgrade/source-code/issues"
+  },
+  "homepage": "https://github.com/blockgrade/source-code#readme",
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.2",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.1",
+    "hardhat": "^2.22.9"
+  }
+}
