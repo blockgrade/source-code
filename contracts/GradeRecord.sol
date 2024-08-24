@@ -29,7 +29,7 @@ contract GradeRecord {
     }
 
     function setGrade(uint256 _id, uint256 _grade, address _document, string memory _discipline, address _teacher, address _student, uint _date, address _digitalIdentity) public onlyOwner {
-        Grade memory grade = Grade(_id, _grade,  _document, _discipline, _teacher, _student, _date, _digitalIdentity)
+        Grade memory grade = Grade(_id, _grade,  _document, _discipline, _teacher, _student, _date, _digitalIdentity);
         grades[_id] = grade;
         gradeArray.push(grade);
     }
@@ -37,7 +37,7 @@ contract GradeRecord {
     function getGrade(uint256 _id) public view returns (uint256, address, string memory, address, address, uint, address) {
         require(grades[_id].id != 0, 'Grade is not available');
         Grade memory document = grades[_id];
-        return (document.grade,  document.document, document.discipline, document.teacher, document.student, document.date, document.digitalIdentity)
+        return (document.grade,  document.document, document.discipline, document.teacher, document.student, document.date, document.digitalIdentity);
     }
 
     function getAllGrades() public view returns (Grade[] memory) {
