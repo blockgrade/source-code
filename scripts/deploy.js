@@ -1,17 +1,15 @@
-const hre = require('hardhat')
+const hre = require('hardhat');
 
 async function main() {
-    const contractApi = await hre.ethers.getContractFactory("GradeRecord")
-    const contractApi_ = await contractApi.deploy()
+    const GradeRegistry = await hre.ethers.getContractFactory("GradeRegistry");
+    const GradeRegistryContract = await GradeRegistry.deploy();
 
-    await contractApi_.deployed()
+    await GradeRegistryContract.waitForDeployment();
 
-    console.log(`Contract Address:  ${contractApi_.address}`)
+    console.log('Contract Address:', await GradeRegistryContract.getAddress());
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-    console.error(error)
-    process.exitCode = 1
-})
+main().catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+});

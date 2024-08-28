@@ -1,12 +1,11 @@
 import express from "express"
 import { ethers } from "ethers"
-import dotenv from 'dotenv'
-import abi from "../../artifacts/contracts/GradeRecord.sol/GradeRecord.json" assert { type: "json" }
+require("dotenv").config();
+import abi from "../../artifacts/contracts/GradeRegistry.sol/GradeRegistry.json" assert { type: "json" }
 import path from "path"
 import multer from "multer"
 import calculateHash from '../utils/fileHash'
 
-dotenv.config()
 
 const API_URL = process.env.API_URL
 const PRIVATE_KEY = process.env.PRIVATE_KEY
