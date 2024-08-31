@@ -3,20 +3,21 @@ import { ethers } from 'ethers';
 import abi from './contractJson/GradeRegistry.json';
 import './App.css';
 
+import {GatewayProvider, useGateway,IdentityButton} from "@civic/ethereum-gateway-react";
+
 import Register from './components/Register';
 import GradeDocuments from './components/GradeDocuments';
 
 function App() {
-  const [state, setState] = useState({
-    provider: null,
-    signer: null,
-    contract: null
-  });
+  const [state, setState] = useState({ provider: null, signer: null, contract: null });
   const [account, setAccount] = useState('Not connected');
+  const gatekeeperNetwork = 'ignREusXmGrscGNUesoU9mxfds9AiYTezUKex2PsZV6';
+  const { requestGatewayToken } = useGateway();
+  const { gatewayStatus, gatewayToken } = useGateway();
 
   useEffect(() => {
     const template = async () => {
-      const contractAddress = '0x4Acd9fE7306ab717746578c1a85A751827F2c992';
+      const contractAddress = '0xedfCD0Fe13529Bb9093029a409E827eba1b15Bce';
       const contractABI = abi.abi;
 
       try {
@@ -26,12 +27,8 @@ function App() {
           return;
         }
 
-        const account = await ethereum.request({
-          method: 'eth_requestAccounts'
-        });
-        window.ethereum.on('accountsChanged', () => {
-          window.location.reload();
-        });
+        const account = await ethereum.request({ method: 'eth_requestAccounts' });
+        window.ethereum.on('accountsChanged', () => window.location.reload());
         setAccount(account);
 
         const provider = new ethers.BrowserProvider(ethereum);
@@ -50,12 +47,27 @@ function App() {
     };
     template();
   }, []);
+
+  // TODO: compreender melhor a forma correta de retornar o objeto dessa função
+  const useWallet = async () => {
+    const provider = new ethers.BrowserProvider(ethereum);
+    const signer = await provider.getSigner();
+    console.log('resultado final', {address: account, signer: signer});
+    return { address: account, signer: signer };
+  }
+
   return (
     <>
       <div className='App'>
+      <GatewayProvider
+      wallet={useWallet()}
+      gatekeeperNetwork={gatekeeperNetwork}>
+        <button onclick={requestGatewayToken}>Civic Pass</button>
+        <IdentityButton />
         Connected account: {account} 
         <Register state={state}></Register>
         <GradeDocuments state={state}></GradeDocuments>
+      </GatewayProvider>
       </div>
     </>
   )
