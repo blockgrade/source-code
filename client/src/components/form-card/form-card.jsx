@@ -4,9 +4,10 @@ import {
   TextField,
   Stack,
   Typography,
-  Button,
   Divider,
 } from "@mui/material";
+import FileUpload from "../file-upload/file-upload";
+import { StyledButton } from "../styled-button/styled-button";
 
 const FormField = styled(TextField)({
   "& .MuiInputBase-input": {
@@ -15,13 +16,13 @@ const FormField = styled(TextField)({
   },
 });
 
-const StyledButton = styled(Button)({
-  backgroundColor: "#292d3d",
-  "&:hover": {
-    backgroundColor: "#4e5a6a",
-  },
-  padding: "10px 0px 10px 0px",
-});
+// const StyledButton = styled(Button)({
+//   backgroundColor: "#292d3d",
+//   "&:hover": {
+//     backgroundColor: "#4e5a6a",
+//   },
+//   padding: "10px 0px 10px 0px",
+// });
 
 export const FormCard = () => {
   return (
@@ -45,6 +46,7 @@ export const FormCard = () => {
         <FormField label="Discipline" color="black" fullWidth />
         <FormField label="Grade" color="black" fullWidth />
         {/* file input here */}
+        <FileUpload />
         <StyledButton variant="contained">Register</StyledButton>
       </Stack>
     </Box>
