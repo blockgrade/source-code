@@ -1,30 +1,46 @@
-import {
-  Box,
-  styled,
-  TextField,
-  Stack,
-  Typography,
-  Divider,
-} from "@mui/material";
-import FileUpload from "../file-upload/file-upload";
-import { StyledButton } from "../styled-button/styled-button";
+import { Box, Stack, Typography, Divider } from "@mui/material";
+import { StyledButton } from "../styled-components/styled-button/styled-button";
+import { FormField } from "../styled-components/form-field/form-field";
+import { useState } from "react";
+import { ethers } from "ethers";
 
-const FormField = styled(TextField)({
-  "& .MuiInputBase-input": {
-    backgroundColor: "#d3c8bb",
-    borderRadius: "10px",
-  },
-});
+export const FormCard = ({ state }) => {
+  const [formValues, setFormValues] = useState({
+    student: "",
+    discipline: "",
+    grade: "",
+    file: "",
+  });
 
-// const StyledButton = styled(Button)({
-//   backgroundColor: "#292d3d",
-//   "&:hover": {
-//     backgroundColor: "#4e5a6a",
-//   },
-//   padding: "10px 0px 10px 0px",
-// });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
 
-export const FormCard = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Form Submitted:", formValues);
+
+    const { contract } = state;
+    const gradeValue = ethers.toBigInt(
+      Math.round(parseFloat(formValues.grade) * 100)
+    );
+
+    const amount = { value: ethers.parseEther("0.001") };
+    const transaction = await contract.submitGradeWithFee(
+      formValues.student,
+      formValues.discipline,
+      gradeValue,
+      formValues.file,
+      amount
+    );
+    await transaction.wait();
+    console.log("Transaction is successful");
+  };
+
   return (
     <Box
       sx={{
@@ -42,12 +58,46 @@ export const FormCard = () => {
       </Typography>
       <Divider sx={{ marginY: 2 }} />
       <Stack spacing={3} sx={{ width: 400, margin: "auto" }}>
-        <FormField label="Student" color="black" fullWidth />
-        <FormField label="Discipline" color="black" fullWidth />
-        <FormField label="Grade" color="black" fullWidth />
-        {/* file input here */}
-        <FileUpload />
-        <StyledButton variant="contained">Register</StyledButton>
+        <FormField
+          name="student"
+          label="Student"
+          color="black"
+          value={formValues.student}
+          onChange={handleChange}
+          fullWidth
+        />
+        <FormField
+          name="discipline"
+          label="Discipline"
+          color="black"
+          value={formValues.discipline}
+          onChange={handleChange}
+          fullWidth
+        />
+        <FormField
+          name="grade"
+          label="Grade"
+          color="black"
+          value={formValues.grade}
+          onChange={handleChange}
+          fullWidth
+        />
+        <FormField
+          name="file"
+          label="File"
+          color="black"
+          value={formValues.file}
+          onChange={handleChange}
+          fullWidth
+        />
+        {/* <FileUpload
+          name="file"
+          onChange={handleChange}
+          value={formValues.file}
+        /> */}
+        <StyledButton variant="contained" onClick={handleSubmit}>
+          Register
+        </StyledButton>
       </Stack>
     </Box>
   );

@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Button, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { StyledButton } from "../styled-components/styled-button/styled-button";
 
-const FileUpload = () => {
+const FileUpload = ({ onChange, name, value }) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    onChange(event);
   };
 
   const handleUploadClick = () => {
@@ -18,17 +20,19 @@ const FileUpload = () => {
       <input
         type="file"
         id="file-upload-input"
+        name={name}
+        value={value}
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
-      <Button
+      <StyledButton
         variant="contained"
         color="primary"
         startIcon={<UploadFileIcon />}
         onClick={handleUploadClick}
       >
         Upload File
-      </Button>
+      </StyledButton>
       {selectedFile && (
         <Typography variant="body1" sx={{ marginTop: 2 }}>
           Selected File: {selectedFile.name}
