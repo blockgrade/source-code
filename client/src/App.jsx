@@ -1,64 +1,72 @@
-import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-import abi from './contractJson/GradeRegistry.json';
-import './App.css';
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import abi from "./contractJson/GradeRegistry.json";
+import "./App.css";
+import { ThemeProvider } from "@mui/material";
 
-import Register from './components/Register';
-import GradeDocuments from './components/GradeDocuments';
+import Register from "./components/Register";
+import GradeDocuments from "./components/GradeDocuments";
+import { FormCard } from "./components/form-card/form-card";
+import { theme } from "./common/theme";
 
 function App() {
   const [state, setState] = useState({
     provider: null,
     signer: null,
-    contract: null
+    contract: null,
   });
-  const [account, setAccount] = useState('Not connected');
+  const [account, setAccount] = useState("Not connected");
 
   useEffect(() => {
     const template = async () => {
-      const contractAddress = '0x4Acd9fE7306ab717746578c1a85A751827F2c992';
+      const contractAddress = "0xB8Cc6Ae79791c099746dF6D5E3e426Dc2dBfAF74";
       const contractABI = abi.abi;
 
       try {
         const { ethereum } = window;
         if (!ethereum) {
-          console.log('Ethereum object not found, install Metamask.');
+          console.log("Ethereum object not found, install Metamask.");
           return;
         }
 
         const account = await ethereum.request({
-          method: 'eth_requestAccounts'
+          method: "eth_requestAccounts",
         });
-        window.ethereum.on('accountsChanged', () => {
+        window.ethereum.on("accountsChanged", () => {
           window.location.reload();
         });
-        setAccount(account);
+        setAccount(account[0]);
 
         const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
 
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          signer
+        );
         setState({ provider, signer, contract });
-      } catch(error) {
-        if (error.message.includes('User denied transaction')) {
-          alert('Transaction was denied by the user.');
+      } catch (error) {
+        if (error.message.includes("User denied transaction")) {
+          alert("Transaction was denied by the user.");
         } else {
-          console.error('App :: useEffect() :: Error:', error);
-          alert('An unexpected error occurred. Please check your connection.');
+          console.error("App :: useEffect() :: Error:", error);
+          alert("An unexpected error occurred. Please check your connection.");
         }
       }
     };
     template();
   }, []);
   return (
-    <>
-      <div className='App'>
-        Connected account: {account} 
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <FormCard />
+        Connected account: {account}
         <Register state={state}></Register>
         <GradeDocuments state={state}></GradeDocuments>
       </div>
-    </>
-  )
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
