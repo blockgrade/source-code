@@ -1,10 +1,12 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, IconButton, Stack, TextField } from "@mui/material";
 import FileUpload from "../file-upload/file-upload";
+import { useState } from "react";
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
+    position: 'relative',
     width: "50%",
     backgroundColor: "#FFF",
     padding: "1rem",
@@ -12,6 +14,27 @@ const style = {
 };
 
 const DocumentDetail = ({ open, handleClose }) => {
+    const [payload, setPayload] = useState({
+        student: "",
+        discipline: "",
+        grade: "",
+        file: ""
+    })
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setPayload({
+            ...payload,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        console.log(payload)
+    }
+
     return (
         <div>
             <Modal
@@ -26,38 +49,48 @@ const DocumentDetail = ({ open, handleClose }) => {
                 }}
             >
                 <Box sx={style}>
-                    <form>
+                    <IconButton onClick={handleClose} sx={{backgroundColor: '#FFF', position: 'absolute', right: 0, top: -40}} aria-label="close" size="small">
+                        <CloseIcon sx={{color: 'red'}}/>
+                    </IconButton>
+                    <form onSubmit={handleSubmit}>
                         <Stack gap={2}>
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Student"
                                 defaultValue=""
+                                name="student"
+                                onChange={handleChange}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Discipline"
                                 defaultValue=""
+                                name="discipline"
+                                onChange={handleChange}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Grade"
-                                defaultValue=""
+                                name="grade"
+                                onChange={handleChange}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="File"
                                 defaultValue=""
+                                name="file"
+                                onChange={handleChange}
                             />
-                            <Button variant="contained" sx={{padding: '12px'}} type="submit">Update</Button>
                             {/* <FileUpload
                                 name="file"
                                 onChange={handleChange}
                                 value={formValues.file}
                             /> */}
+                            <Button variant="contained" sx={{padding: '12px'}} type="submit">Update</Button>
                         </Stack>
                     </form>
                 </Box>

@@ -17,12 +17,17 @@
   },
   "homepage": "https://github.com/blockgrade/source-code#readme",
   "dependencies": {
+    "@helia/core": "^0.0.0",
+    "@helia/unixfs": "^3.0.7",
+    "@ipld/car": "^5.3.2",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "dotenv": "^16.4.5",
     "ethers": "^6.13.2",
     "express": "^4.19.2",
     "express-fileupload": "^1.5.1",
     "hardhat": "^2.22.9",
-    "ipfs-http-client": "^60.0.1"
+    "helia": "^4.2.5",
+    "ipfs-http-client": "^60.0.1",
+    "multiformats": "^13.2.2"
   }
 }

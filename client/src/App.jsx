@@ -8,6 +8,7 @@ import Register from "./components/Register";
 import GradeDocuments from "./components/GradeDocuments";
 import { FormCard } from "./components/form-card/form-card";
 import { theme } from "./common/theme";
+import PdfUploader from "./components/ipfs-card/IpfsCard";
 
 function App() {
   const [state, setState] = useState({
@@ -60,6 +61,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
+        <PdfUploader/>
         Connected account: {account}
         <div className="article" style={{display: 'flex', gap: '1rem'}}>
           <FormCard state={state} />
