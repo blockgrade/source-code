@@ -37,6 +37,7 @@ const GradeDocuments = ({ state }) => {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center"></TableCell>
+                            <TableCell align="center"></TableCell>
                             <TableCell align="center">Student</TableCell>
                             <TableCell align="center">Discipline</TableCell>
                             <TableCell align="center">Grade</TableCell>
@@ -66,8 +67,16 @@ const GradeDocuments = ({ state }) => {
                                         align="center"
                                         sx={{ minWidth: 150 }}
                                     >
+                                        <Button type="button" variant="outlined">
+                                            View Document
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        sx={{ minWidth: 150 }}
+                                    >
                                         <Button type="button" variant="outlined" onClick={handleOpen}>
-                                            Detalhe
+                                            Update
                                         </Button>
                                     </TableCell>
                                     <TableCell
