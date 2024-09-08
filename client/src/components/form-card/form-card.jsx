@@ -25,6 +25,7 @@ export const FormCard = ({ state }) => {
     console.log("Form Submitted:", formValues);
 
     const { contract } = state;
+    console.log(contract)
     const gradeValue = ethers.toBigInt(
       Math.round(parseFloat(formValues.grade) * 100)
     );
@@ -47,7 +48,7 @@ export const FormCard = ({ state }) => {
         backgroundColor: "#a6a2a0",
         borderRadius: 1,
         boxShadow: "1px 32px 39px -3px rgba(0,0,0,0.75);",
-        width: 500,
+        width: 'calc(45%-1rem)',
         margin: "auto",
         paddingX: 3,
         paddingY: 5,
