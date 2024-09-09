@@ -10,26 +10,26 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import "./GradeDocuments.css";
 import { Box, Button } from "@mui/material";
 import DocumentDetail from "./modal/DocumentDetail";
 
 const GradeDocuments = ({ state }) => {
     const [gradeDocument, setGradeDocument] = useState([]);
+    const [selectedGrade, setSelectedGrade] = useState(null);
     const { contract } = state;
 
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = (gradeDoc) => (setSelectedGrade(gradeDoc), setOpen(true));
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
         const gradesList = async () => {
             const grades = await contract.getGrades();
             setGradeDocument(grades);
-        };
+        };   
         contract && gradesList();
     }, [contract]);
-
+   
     return (
         <>
             <TableContainer component={Paper} sx={{width: 'calc(65%-1rem)'}}>
@@ -47,72 +47,33 @@ const GradeDocuments = ({ state }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {gradeDocument.map((gradeDoc, index) => {
-                            const grade =
-                                ethers.formatUnits(gradeDoc.grade, 0) / 100;
-                            const timestamp = new Date(
-                                Number(gradeDoc.timestamp) * 1000
-                            ).toLocaleString();
+    {gradeDocument && gradeDocument.length > 0 ? (
+        gradeDocument.map((gradeDoc, index) => {
+            const grade = ethers.formatUnits(gradeDoc.grade, 0) / 100;
+            const timestamp = new Date(Number(gradeDoc.timestamp) * 1000).toLocaleString();
+            return (
+                <TableRow key={index} sx={{"&:last-child td, &:last-child th": {border: 0 }}}>
+                    <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined">View Document</Button></TableCell>
+                    <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined" onClick={() => handleOpen(gradeDoc)}>Update</Button></TableCell>
+                    <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.student}</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.discipline}</TableCell>
+                    <TableCell align="center">{grade}</TableCell>
+                    <TableCell align="center" sx={{ minWidth: 150 }}>{timestamp}</TableCell>
+                    <TableCell align="center">{gradeDoc.document}</TableCell>
+                    <TableCell align="center">{gradeDoc.from}</TableCell>
+                </TableRow>
+            );
+        })
+    ) : (
+        <TableRow>
+            <TableCell colSpan={8} align="center">No grades available</TableCell>
+        </TableRow>
+    )}
+</TableBody>
 
-                            return (
-                                <TableRow
-                                    key={index}
-                                    sx={{
-                                        "&:last-child td, &:last-child th": {
-                                            border: 0,
-                                        },
-                                    }}
-                                >
-                                    <TableCell
-                                        align="center"
-                                        sx={{ minWidth: 150 }}
-                                    >
-                                        <Button type="button" variant="outlined">
-                                            View Document
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        sx={{ minWidth: 150 }}
-                                    >
-                                        <Button type="button" variant="outlined" onClick={handleOpen}>
-                                            Update
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        sx={{ minWidth: 150 }}
-                                    >
-                                        {gradeDoc.student}
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        sx={{ minWidth: 150 }}
-                                    >
-                                        {gradeDoc.discipline}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {grade}
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
-                                        sx={{ minWidth: 150 }}
-                                    >
-                                        {timestamp}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {gradeDoc.document}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {gradeDoc.from}
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
                 </Table>
             </TableContainer>
-			<Box sx={{position: 'absolute'}}>{open && <DocumentDetail open={open} handleClose={handleClose}/>}</Box>
+			<Box sx={{position: 'absolute'}}>{open && <DocumentDetail state={state} open={open} handleClose={handleClose} grade={selectedGrade} />}</Box>
         </>
     );
 };

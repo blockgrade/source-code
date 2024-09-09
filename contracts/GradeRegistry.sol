@@ -3,58 +3,74 @@ pragma solidity ^0.8.24;
 
 contract GradeRegistry {
 
-  struct Grade {
-    string student;
-    string discipline;
-    uint grade;
-    uint timestamp;
-    address document;
-    address from;
-  }
+    struct Grade {
+        bytes32 id; 
+        string student;
+        string discipline;
+        uint grade;
+        uint timestamp;
+        address document;
+        address from;
+    }
 
-  struct GradeHistory {
-    Grade[] versions;
-  }
+    struct GradeHistory {
+        Grade[] versions;
+    }
 
-  Grade[] public grades;
-  mapping(uint => GradeHistory) private gradeHistories;
-  address payable owner;  
+    Grade[] public grades;
+    mapping(bytes32 => GradeHistory) private gradeHistories;
+    address payable owner;
 
-  constructor() {
-    owner = payable(msg.sender);
-  }
+    constructor() {
+        owner = payable(msg.sender);
+    }
 
-  function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, address document) external payable {
-    require(msg.value > 0, 'Please pay more than 0 ether');
-    owner.transfer(msg.value);
+    function generateId(string memory student, string memory discipline, uint grade, address document, address from, uint timestamp) private pure returns (bytes32) {
+        return keccak256(abi.encodePacked(student, discipline, grade, document, from, timestamp));
+    }
 
-    Grade memory newGrade = Grade(student, discipline, grade, block.timestamp, document, msg.sender);
-    grades.push(newGrade);
+    function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, address document) external payable {
+        require(msg.value > 0, 'Please pay more than 0 ether');
+        owner.transfer(msg.value);
 
-    uint index = grades.length - 1;
-    gradeHistories[index].versions.push(newGrade);
-  }
+        uint timestamp = block.timestamp;
+        bytes32 gradeId = generateId(student, discipline, grade, document, msg.sender, timestamp);
 
-  function updateGrade(uint index, string calldata student, string calldata discipline, uint gradeValue, address document) external {
-    require(index < grades.length, "Invalid index");
-    Grade storage currentGrade = grades[index];
-    require(currentGrade.from == msg.sender, "You can only update your own grades");
+        Grade memory newGrade = Grade(gradeId, student, discipline, grade, timestamp, document, msg.sender);
+        grades.push(newGrade);
 
-    gradeHistories[index].versions.push(currentGrade);
+        gradeHistories[gradeId].versions.push(newGrade);
+    }
 
-    currentGrade.student = student;
-    currentGrade.discipline = discipline;
-    currentGrade.grade = gradeValue;
-    currentGrade.document = document;
-    currentGrade.timestamp = block.timestamp;
-  }
+    function updateGrade(bytes32 gradeId, string calldata student, string calldata discipline, uint gradeValue, address document) external {
+        require(gradeHistories[gradeId].versions.length > 0, "Invalid ID");
+        Grade storage currentGrade = grades[findGradeIndex(gradeId)];
+        require(currentGrade.from == msg.sender, "You can only update your own grades");
 
-  function getGrades() public view returns (Grade[] memory) {
-    return grades;
-  }
+        gradeHistories[gradeId].versions.push(currentGrade);
 
-  function getGradeHistory(uint index) public view returns (Grade[] memory) {
-    require(index < grades.length, "Invalid index");
-    return gradeHistories[index].versions;
-  }
+        currentGrade.student = student;
+        currentGrade.discipline = discipline;
+        currentGrade.grade = gradeValue;
+        currentGrade.document = document;
+        currentGrade.timestamp = block.timestamp;
+    }
+
+    function findGradeIndex(bytes32 gradeId) private view returns (uint) {
+        for (uint i = 0; i < grades.length; i++) {
+            if (grades[i].id == gradeId) {
+                return i;
+            }
+        }
+        revert("Grade not found");
+    }
+
+    function getGrades() public view returns (Grade[] memory) {
+        return grades;
+    }
+
+    function getGradeHistory(bytes32 gradeId) public view returns (Grade[] memory) {
+        require(gradeHistories[gradeId].versions.length > 0, "Invalid ID");
+        return gradeHistories[gradeId].versions;
+    }
 }

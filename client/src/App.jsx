@@ -4,7 +4,6 @@ import abi from "./contractJson/GradeRegistry.json";
 import "./App.css";
 import { ThemeProvider } from "@mui/material";
 
-import Register from "./components/Register";
 import GradeDocuments from "./components/GradeDocuments";
 import { FormCard } from "./components/form-card/form-card";
 import { theme } from "./common/theme";
@@ -20,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const template = async () => {
-      const contractAddress = "0x88Fc27238A2A8217A24B25324fd535D69197E486";
+      const contractAddress = "0x51366126e7c23Df0DEf032A20E47717B45CE7f73";
       const contractABI = abi.abi;
 
       try {
