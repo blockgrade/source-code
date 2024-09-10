@@ -18,7 +18,8 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
         'id': '',
         'student': '', 
         'discipline': '', 
-        'grade': '', 'document': ''
+        'grade': '', 
+        'document': ''
     });
 
     useEffect(() => {
@@ -46,14 +47,12 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
        
         const { contract } = state;
         const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
-        const amount = { value: ethers.parseEther("0.001") };
         const transaction = await contract.updateGrade(
             payload.id,
             payload.student, 
             payload.discipline, 
             gradeValue, 
-            payload.file, 
-            amount
+            payload.document
         );
         await transaction.wait();
 
@@ -70,7 +69,7 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
                             <TextField required id="outlined-required" label="Student" name="student" value={payload.student} onChange={handleChange} />
                             <TextField required id="outlined-required" label="Discipline" name="discipline" value={payload.discipline} onChange={handleChange} />
                             <TextField required id="outlined-required" label="Grade" name="grade" value={payload.grade} onChange={handleChange} />
-                            <TextField required id="outlined-required" label="File" name="file" value={payload.file} onChange={handleChange} />
+                            <TextField required id="outlined-required" label="File" name="document" value={payload.document} onChange={handleChange} />
                             <Button variant="contained" sx={{ padding: '12px' }} type="submit" onClick={updateGradeInfo}>Update</Button>
                         </Stack>
                     </form>
