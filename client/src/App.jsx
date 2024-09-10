@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const template = async () => {
-      const contractAddress = "0x51366126e7c23Df0DEf032A20E47717B45CE7f73";
+      const contractAddress = "0x51a19a83b78dfDa55F05900a23D3f90fc81242C5";
       const contractABI = abi.abi;
 
       try {
@@ -60,9 +60,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <PdfUploader/>
+        <PdfUploader />
         Connected account: {account}
-        <div className="article" style={{display: 'flex', gap: '1rem'}}>
+        <div className="article" style={{ display: "flex", gap: "1rem" }}>
           <FormCard state={state} />
           <GradeDocuments state={state}></GradeDocuments>
         </div>
