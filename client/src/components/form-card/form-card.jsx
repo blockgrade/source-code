@@ -39,6 +39,7 @@ export const FormCard = ({ state }) => {
       amount
     );
     await transaction.wait();
+    window.location.reload();
     console.log("Transaction is successful");
   };
 
