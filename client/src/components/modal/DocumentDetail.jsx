@@ -23,13 +23,13 @@ const style = {
 };
 
 const DocumentDetail = ({ state, open, handleClose, grade }) => {
-  const [payload, setPayload] = useState({
-    id: "",
-    student: "",
-    discipline: "",
-    grade: "",
-    document: "",
-  });
+    const [payload, setPayload] = useState({
+        'id': '',
+        'student': '', 
+        'discipline': '', 
+        'grade': '', 
+        'document': ''
+    });
 
   useEffect(() => {
     if (grade)
@@ -52,23 +52,19 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
     console.log(payload);
   };
 
-  const updateGradeInfo = async (event) => {
-    event.preventDefault();
-
-    const { contract } = state;
-    const gradeValue = ethers.toBigInt(
-      Math.round(parseFloat(payload.grade) * 100)
-    );
-    const amount = { value: ethers.parseEther("0.001") };
-    const transaction = await contract.updateGrade(
-      payload.id,
-      payload.student,
-      payload.discipline,
-      gradeValue,
-      payload.file,
-      amount
-    );
-    await transaction.wait();
+    const updateGradeInfo = async (event) => {
+        event.preventDefault();
+       
+        const { contract } = state;
+        const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
+        const transaction = await contract.updateGrade(
+            payload.id,
+            payload.student, 
+            payload.discipline, 
+            gradeValue, 
+            payload.document
+        );
+        await transaction.wait();
 
     console.log("Transaction is successful");
   };
