@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,18 +15,21 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import HistoryIcon from "@mui/icons-material/History";
 import ArticleIcon from "@mui/icons-material/Article";
 import EditIcon from "@mui/icons-material/Edit";
+import { HistoryModal } from "./modal/history-modal";
+import GradeContext from "../context/grade.context";
 
-const GradeDocuments = ({ state }) => {
-  const [gradeDocument, setGradeDocument] = useState([]);
+const GradeDocuments = () => {
   const [selectedGrade, setSelectedGrade] = useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const { contract } = state;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { state, gradeDocument, getGradesList, contract } =
+    useContext(GradeContext);
 
   const [documentModalOpen, setDocumentModalOpenOpen] = useState(false);
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
-  const handleOpen = (gradeDoc) => {
+
+  const handleOpen = () => {
     handleMenuClose();
-    setSelectedGrade(gradeDoc);
+    // setSelectedGrade(gradeDoc);
     setDocumentModalOpenOpen(true);
   };
   const handleClose = () => setDocumentModalOpenOpen(false);
@@ -36,19 +38,16 @@ const GradeDocuments = ({ state }) => {
     setHistoryModalOpen(true);
   };
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = (event, gradeDoc) => {
     setAnchorEl(event.currentTarget);
+    setSelectedGrade(gradeDoc);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
   useEffect(() => {
-    const gradesList = async () => {
-      const grades = await contract.getGrades();
-      setGradeDocument(grades);
-    };
-    contract && gradesList();
+    contract && getGradesList();
   }, [contract]);
 
   return (
@@ -105,7 +104,7 @@ const GradeDocuments = ({ state }) => {
                   >
                     <TableCell>
                       <StyledButton
-                        onClick={handleMenuClick}
+                        onClick={(event) => handleMenuClick(event, gradeDoc)}
                         sx={{ width: 50, height: 50 }}
                       >
                         <LaunchIcon sx={{ color: "white" }} />
@@ -129,7 +128,7 @@ const GradeDocuments = ({ state }) => {
                         <MenuItem onClick={handleMenuClose}>
                           <ArticleIcon sx={{ marginRight: 1 }} /> View Document
                         </MenuItem>
-                        <MenuItem onClick={() => handleOpen(gradeDoc)}>
+                        <MenuItem onClick={() => handleOpen()}>
                           <EditIcon sx={{ marginRight: 1 }} /> Update
                         </MenuItem>
                       </Menu>
@@ -186,16 +185,13 @@ const GradeDocuments = ({ state }) => {
       <Box sx={{ position: "absolute" }}>
         {documentModalOpen && (
           <DocumentDetail
-            state={state}
             open={documentModalOpen}
             handleClose={handleClose}
             grade={selectedGrade}
           />
         )}
 
-        {/* {historyModalOpen && (
-          
-        )} */}
+        {historyModalOpen && <HistoryModal />}
       </Box>
     </>
   );

@@ -1,7 +1,14 @@
-import React from 'react'
+import { Modal } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-export const HistoryModal = () => {
+export const HistoryModal = ({ open, handleClose }) => {
+  const [history, setHistory] = useState();
+
+  useEffect(() => {}, []);
+
   return (
-    <div>HistoryModal</div>
-  )
-}
+    <div>
+      <Modal open={open} onClose={handleClose}></Modal>
+    </div>
+  );
+};

@@ -7,10 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledButton } from "../styled-components/styled-button/styled-button";
+import GradeContext from "../../context/grade.context";
 
 const style = {
   position: "relative",
@@ -22,14 +23,15 @@ const style = {
   backgroundColor: "#d3c8bb",
 };
 
-const DocumentDetail = ({ state, open, handleClose, grade }) => {
-    const [payload, setPayload] = useState({
-        'id': '',
-        'student': '', 
-        'discipline': '', 
-        'grade': '', 
-        'document': ''
-    });
+const DocumentDetail = ({ open, handleClose, grade }) => {
+  const { state, contract } = useContext(GradeContext);
+  const [payload, setPayload] = useState({
+    id: "",
+    student: "",
+    discipline: "",
+    grade: "",
+    document: "",
+  });
 
   useEffect(() => {
     if (grade)
@@ -52,19 +54,20 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
     console.log(payload);
   };
 
-    const updateGradeInfo = async (event) => {
-        event.preventDefault();
-       
-        const { contract } = state;
-        const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
-        const transaction = await contract.updateGrade(
-            payload.id,
-            payload.student, 
-            payload.discipline, 
-            gradeValue, 
-            payload.document
-        );
-        await transaction.wait();
+  const updateGradeInfo = async (event) => {
+    event.preventDefault();
+
+    const gradeValue = ethers.toBigInt(
+      Math.round(parseFloat(payload.grade) * 100)
+    );
+    const transaction = await contract.updateGrade(
+      payload.id,
+      payload.student,
+      payload.discipline,
+      gradeValue,
+      payload.document
+    );
+    await transaction.wait();
 
     console.log("Transaction is successful");
   };
