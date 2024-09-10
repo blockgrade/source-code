@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     const template = async () => {
-      const contractAddress = "0x51a19a83b78dfDa55F05900a23D3f90fc81242C5";
+      const contractAddress = "0x2B12aAf41689178aac617DE780EB30bD00572a81";
       const contractABI = abi.abi;
 
       try {

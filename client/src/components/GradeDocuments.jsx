@@ -10,17 +10,38 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { StyledButton } from "./styled-components/styled-button/styled-button";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Menu, MenuItem } from "@mui/material";
 import DocumentDetail from "./modal/DocumentDetail";
+import LaunchIcon from "@mui/icons-material/Launch";
+import HistoryIcon from "@mui/icons-material/History";
+import ArticleIcon from "@mui/icons-material/Article";
+import EditIcon from "@mui/icons-material/Edit";
 
 const GradeDocuments = ({ state }) => {
   const [gradeDocument, setGradeDocument] = useState([]);
   const [selectedGrade, setSelectedGrade] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const { contract } = state;
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = (gradeDoc) => (setSelectedGrade(gradeDoc), setOpen(true));
-  const handleClose = () => setOpen(false);
+  const [documentModalOpen, setDocumentModalOpenOpen] = useState(false);
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const handleOpen = (gradeDoc) => {
+    handleMenuClose();
+    setSelectedGrade(gradeDoc);
+    setDocumentModalOpenOpen(true);
+  };
+  const handleClose = () => setDocumentModalOpenOpen(false);
+
+  const handleHistoryModal = () => {
+    setHistoryModalOpen(true);
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     const gradesList = async () => {
@@ -42,7 +63,6 @@ const GradeDocuments = ({ state }) => {
           >
             <TableRow>
               <TableCell sx={{ color: "white" }} align="center"></TableCell>
-              <TableCell sx={{ color: "white" }} align="center"></TableCell>
               <TableCell sx={{ color: "white" }} align="center">
                 Student
               </TableCell>
@@ -63,7 +83,7 @@ const GradeDocuments = ({ state }) => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody sx={{ backgroundColor: "#1f222e" }}>
+          <TableBody>
             {gradeDocument && gradeDocument.length > 0 ? (
               gradeDocument.map((gradeDoc, index) => {
                 const grade = ethers.formatUnits(gradeDoc.grade, 0) / 100;
@@ -83,28 +103,36 @@ const GradeDocuments = ({ state }) => {
                       }),
                     }}
                   >
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 150, borderBottomColor: "#1f222e" }}
-                    >
+                    <TableCell>
                       <StyledButton
-                        sx={{ backgroundColor: "#7f90a4" }}
-                        type="button"
+                        onClick={handleMenuClick}
+                        sx={{ width: 50, height: 50 }}
                       >
-                        View Document
+                        <LaunchIcon sx={{ color: "white" }} />
                       </StyledButton>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ minWidth: 150, borderBottomColor: "#1f222e" }}
-                    >
-                      <StyledButton
-                        sx={{ backgroundColor: "#7f90a4" }}
-                        type="button"
-                        onClick={() => handleOpen(gradeDoc)}
+                      <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={anchorEl ? true : false}
+                        onClose={handleMenuClose}
+                        MenuListProps={{
+                          "aria-labelledby": "basic-button",
+                        }}
+                        anchorOrigin={{
+                          vertical: "top",
+                          horizontal: "right",
+                        }}
                       >
-                        Update
-                      </StyledButton>
+                        <MenuItem onClick={handleMenuClose}>
+                          <HistoryIcon sx={{ marginRight: 1 }} /> History
+                        </MenuItem>
+                        <MenuItem onClick={handleMenuClose}>
+                          <ArticleIcon sx={{ marginRight: 1 }} /> View Document
+                        </MenuItem>
+                        <MenuItem onClick={() => handleOpen(gradeDoc)}>
+                          <EditIcon sx={{ marginRight: 1 }} /> Update
+                        </MenuItem>
+                      </Menu>
                     </TableCell>
                     <TableCell
                       align="center"
@@ -156,14 +184,18 @@ const GradeDocuments = ({ state }) => {
         </Table>
       </TableContainer>
       <Box sx={{ position: "absolute" }}>
-        {open && (
+        {documentModalOpen && (
           <DocumentDetail
             state={state}
-            open={open}
+            open={documentModalOpen}
             handleClose={handleClose}
             grade={selectedGrade}
           />
         )}
+
+        {/* {historyModalOpen && (
+          
+        )} */}
       </Box>
     </>
   );
