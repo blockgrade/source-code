@@ -60,9 +60,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <PdfUploader/>
+        <PdfUploader />
         Connected account: {account}
-        <div className="article" style={{display: 'flex', gap: '1rem'}}>
+        <div className="article" style={{ display: "flex", gap: "1rem" }}>
           <FormCard state={state} />
           <GradeDocuments state={state}></GradeDocuments>
         </div>
