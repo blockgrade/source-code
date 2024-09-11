@@ -48,6 +48,11 @@ const GradeDocuments = () => {
     setAnchorEl(null);
   };
 
+  const handleViewDocument = () => {
+    window.open(`https://gold-far-raven-8.mypinata.cloud/ipfs/${selectedGrade.document}`)
+    handleMenuClose()
+  }
+
   useEffect(() => {
     contract && getGradesList();
   }, [contract]);
@@ -129,8 +134,8 @@ const GradeDocuments = () => {
                         <MenuItem onClick={handleHistoryModal}>
                           <HistoryIcon sx={{ marginRight: 1 }} /> History
                         </MenuItem>
-                        <MenuItem onClick={handleMenuClose}>
-                          <ArticleIcon sx={{ marginRight: 1 }} /> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
+                        <MenuItem onClick={handleViewDocument}>
+                          <ArticleIcon sx={{ marginRight: 1 }}/> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
                         </MenuItem>
                         <MenuItem onClick={() => handleOpen()}>
                           <EditIcon sx={{ marginRight: 1 }} /> Update

@@ -1,0 +1,29 @@
+/* Esconde o input padrão */
+input[type="file"] {
+    display: none;
+}
+
+/* Estiliza o label para se parecer com um botão */
+.custom-file-upload {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #292d3d;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #4e5a6a;
+}
+
+/* Estilo para estado de foco */
+.custom-file-upload:focus {
+    outline: none;
+    background-color: #4e5a6a;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}

@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledButton } from "../styled-components/styled-button/styled-button";
 import GradeContext from "../../context/grade.context";
+import PdfUploader from "../ipfs-card/IpfsCard";
 
 const style = {
   position: "relative",
@@ -53,6 +54,13 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
     event.preventDefault();
     console.log(payload);
   };
+
+  const handleFileChange = (file) => {
+    setFormValues({
+      ...formValues,
+      file
+    })
+  }
 
   const updateGradeInfo = async (event) => {
     event.preventDefault();
@@ -132,14 +140,10 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
                 value={payload.grade}
                 onChange={handleChange}
               />
-              <TextField
-                required
-                id="outlined-required"
-                label="File"
+              <PdfUploader 
                 name="file"
-                sx={{ backgroundColor: "#f5e8da" }}
+                onChange={handleFileChange}
                 value={payload.file}
-                onChange={handleChange}
               />
               <StyledButton
                 variant="contained"

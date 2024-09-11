@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { ethers } from "ethers";
 import GradeContext from "../../context/grade.context";
 import PdfUploader from "../ipfs-card/IpfsCard";
+import uploadFile from "../../../utils/uploadFile";
 
 export const FormCard = () => {
   const { state, contract } = useContext(GradeContext);
@@ -24,6 +25,13 @@ export const FormCard = () => {
     });
   };
 
+  const handleFileChange = (file) => {
+    setFormValues({
+      ...formValues,
+      file
+    })
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Form Submitted:", formValues);
@@ -33,16 +41,17 @@ export const FormCard = () => {
       Math.round(parseFloat(formValues.grade) * 100)
     );
     // incluir o arquivo
+    const file = await uploadFile(formValues.file)
     const amount = { value: ethers.parseEther("0.001") };
     const transaction = await contract.submitGradeWithFee(
       formValues.student,
       formValues.discipline,
       gradeValue,
-      formValues.file,
+      file,
       amount
     );
     await transaction.wait();
-    window.location.reload();
+    // window.location.reload();
     console.log("Transaction is successful");
   };
 
@@ -89,7 +98,7 @@ export const FormCard = () => {
         />
         <PdfUploader
           name="file"
-          onChange={handleChange}
+          onChange={handleFileChange}
           value={formValues.file}
         /> 
         <StyledButton variant="contained" onClick={handleSubmit}>

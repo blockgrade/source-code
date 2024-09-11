@@ -28,8 +28,8 @@ export default App;
 
 /*
 TODO
-- retirar botão preto do form-card e incluir ipfs ANTES de registrar na blockchain
-- incluir hiperlink do ipfs no botão de download de cada tupla da tablea
+- retirar botão preto do form-card e incluir ipfs ANTES de registrar na blockchain X
+- incluir hiperlink do ipfs no botão de download de cada tupla da tablea X
 - incluir botão de upload do ipfs no modal de editar
 
 */

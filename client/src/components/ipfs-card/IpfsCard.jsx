@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import './style.css'
 
-const PdfUploader = () => {
+const PdfUploader = ({ name, value, onChange }) => {
     const [file, setFile] = useState(null);
     const [ipfsHash, setIpfsHash] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
+        onChange(selectedFile)
         setFile(selectedFile);
     };
 
@@ -37,11 +39,9 @@ const PdfUploader = () => {
 
     return (
         <div>
-            <form onSubmit={uploadFile}>
-                <label htmlFor="file-upload" className="custom-file-upload">Select File</label>
-                <input id="file-upload" type="file" onChange={handleFileChange} />
-                <button className="button" type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload file'}</button>
-            </form>
+            <label htmlFor="file-upload" className="custom-file-upload">SELECT FILE</label>
+            <input id="file-upload" name={name} type="file" onChange={handleFileChange} />
+            {/* <button className="button" type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload file'}</button> */}
         </div>
     );
 };
