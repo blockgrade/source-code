@@ -9,7 +9,7 @@ contract GradeRegistry {
         string discipline;
         uint grade;
         uint timestamp;
-        address document;
+        string document;
         address from;
     }
 
@@ -25,11 +25,11 @@ contract GradeRegistry {
         owner = payable(msg.sender);
     }
 
-    function generateId(string memory student, string memory discipline, uint grade, address document, address from, uint timestamp) private pure returns (bytes32) {
+    function generateId(string memory student, string memory discipline, uint grade, string calldata document, address from, uint timestamp) private pure returns (bytes32) {
         return keccak256(abi.encodePacked(student, discipline, grade, document, from, timestamp));
     }
 
-    function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, address document) external payable {
+    function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, string calldata document) external payable {
         require(msg.value > 0, 'Please pay more than 0 ether');
         owner.transfer(msg.value);
 
@@ -42,7 +42,7 @@ contract GradeRegistry {
         gradeHistories[gradeId].versions.push(newGrade);
     }
 
-    function updateGrade(bytes32 gradeId, string calldata student, string calldata discipline, uint gradeValue, address document) external {
+    function updateGrade(bytes32 gradeId, string calldata student, string calldata discipline, uint gradeValue, string calldata document) external {
         require(gradeHistories[gradeId].versions.length > 0, "Invalid ID");
         Grade storage currentGrade = grades[findGradeIndex(gradeId)];
         require(currentGrade.from == msg.sender, "You can only update your own grades");

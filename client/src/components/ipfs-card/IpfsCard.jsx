@@ -1,8 +1,4 @@
 import React, { useState } from "react";
-import { create } from "ipfs-http-client";
-
-// URL padrão para o IPFS Desktop
-const ipfsClient = create("http://localhost:5001");
 
 const PdfUploader = () => {
     const [file, setFile] = useState(null);
@@ -10,46 +6,42 @@ const PdfUploader = () => {
     const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event) => {
-        setFile(event.target.files[0]);
+        const selectedFile = event.target.files[0];
+        setFile(selectedFile);
     };
 
-    const handleUpload = async () => {
+    const uploadFile = async (event) => {
+        event.preventDefault();
         if (!file) {
             alert("Please select a file to upload");
             return;
         }
-
         try {
             setLoading(true);
-            const addedFile = await ipfsClient.add(file);
-            setIpfsHash(addedFile.path); // O hash IPFS do arquivo
-            setLoading(false);
+            const formData = new FormData();
+            formData.append("file", file);
+            console.log('file',file)
+            const response = await fetch("http://localhost:4000/upload", { method: "POST", body: formData });
+            if (response.ok) {
+                const result = await response.json();
+                setIpfsHash(result.IpfsHash); //form-card tem que receber ipfsHash dentro do objeto document na hora de registrar na blockchain
+            } else {
+                console.error("Error uploading file:", response.statusText);
+            }
         } catch (error) {
             console.error("Error uploading file:", error);
+        } finally {
             setLoading(false);
         }
     };
 
     return (
         <div>
-            <h2>Upload PDF to IPFS</h2>
-            <input type="file" accept=".pdf" onChange={handleFileChange} />
-            <button onClick={handleUpload} disabled={loading}>
-                {loading ? "Uploading..." : "Upload PDF"}
-            </button>
-
-            {ipfsHash && (
-                <div>
-                    <p>IPFS Hash: {ipfsHash}</p>
-                    <a
-                        href={`https://ipfs.io/ipfs/${ipfsHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        View PDF
-                    </a>
-                </div>
-            )}
+            <form onSubmit={uploadFile}>
+                <label htmlFor="file-upload" className="custom-file-upload">Select File</label>
+                <input id="file-upload" type="file" onChange={handleFileChange} />
+                <button className="button" type="submit" disabled={loading}>{loading ? 'Uploading...' : 'Upload file'}</button>
+            </form>
         </div>
     );
 };

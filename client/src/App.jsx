@@ -5,7 +5,6 @@ import { ThemeProvider } from "@mui/material";
 import GradeDocuments from "./components/GradeDocuments";
 import { FormCard } from "./components/form-card/form-card.component";
 import { theme } from "./common/theme";
-import PdfUploader from "./components/ipfs-card/IpfsCard";
 import GradeContext from "./context/grade.context";
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <PdfUploader />
         Connected account: {account}
         <div className="article" style={{ display: "flex", gap: "1rem" }}>
           <FormCard />
@@ -26,3 +24,12 @@ function App() {
 }
 
 export default App;
+
+
+/*
+TODO
+- retirar botão preto do form-card e incluir ipfs ANTES de registrar na blockchain
+- incluir hiperlink do ipfs no botão de download de cada tupla da tablea
+- incluir botão de upload do ipfs no modal de editar
+
+*/
