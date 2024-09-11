@@ -3,6 +3,7 @@ import { StyledButton } from "../styled-components/styled-button/styled-button";
 import { FormField } from "../styled-components/form-field/form-field";
 import { useState } from "react";
 import { ethers } from "ethers";
+import PdfUploader from "../ipfs-card/IpfsCard";
 
 export const FormCard = ({ state }) => {
   const [formValues, setFormValues] = useState({
@@ -83,19 +84,11 @@ export const FormCard = ({ state }) => {
           onChange={handleChange}
           fullWidth
         />
-        <FormField
-          name="file"
-          label="File"
-          color="black"
-          value={formValues.file}
-          onChange={handleChange}
-          fullWidth
-        />
-        {/* <FileUpload
+        <PdfUploader
           name="file"
           onChange={handleChange}
           value={formValues.file}
-        /> */}
+        /> 
         <StyledButton variant="contained" onClick={handleSubmit}>
           Register
         </StyledButton>

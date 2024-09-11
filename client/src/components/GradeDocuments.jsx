@@ -25,6 +25,7 @@ const GradeDocuments = ({ state }) => {
     useEffect(() => {
         const gradesList = async () => {
             const grades = await contract.getGrades();
+            console.log('grades', grades);
             setGradeDocument(grades);
         };   
         contract && gradesList();
@@ -47,30 +48,29 @@ const GradeDocuments = ({ state }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-    {gradeDocument && gradeDocument.length > 0 ? (
-        gradeDocument.map((gradeDoc, index) => {
-            const grade = ethers.formatUnits(gradeDoc.grade, 0) / 100;
-            const timestamp = new Date(Number(gradeDoc.timestamp) * 1000).toLocaleString();
-            return (
-                <TableRow key={index} sx={{"&:last-child td, &:last-child th": {border: 0 }}}>
-                    <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined">View Document</Button></TableCell>
-                    <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined" onClick={() => handleOpen(gradeDoc)}>Update</Button></TableCell>
-                    <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.student}</TableCell>
-                    <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.discipline}</TableCell>
-                    <TableCell align="center">{grade}</TableCell>
-                    <TableCell align="center" sx={{ minWidth: 150 }}>{timestamp}</TableCell>
-                    <TableCell align="center">{gradeDoc.document}</TableCell>
-                    <TableCell align="center">{gradeDoc.from}</TableCell>
-                </TableRow>
-            );
-        })
-    ) : (
-        <TableRow>
-            <TableCell colSpan={8} align="center">No grades available</TableCell>
-        </TableRow>
-    )}
-</TableBody>
-
+                        {gradeDocument && gradeDocument.length > 0 ? (
+                            gradeDocument.map((gradeDoc, index) => {
+                                const grade = ethers.formatUnits(gradeDoc.grade, 0) / 100;
+                                const timestamp = new Date(Number(gradeDoc.timestamp) * 1000).toLocaleString();
+                                return (
+                                    <TableRow key={index} sx={{"&:last-child td, &:last-child th": {border: 0 }}}>
+                                        <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined" href={`https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.document}`}>View Document</Button></TableCell>
+                                        <TableCell align="center" sx={{ minWidth: 150 }}><Button type="button" variant="outlined" onClick={() => handleOpen(gradeDoc)}>Update</Button></TableCell>
+                                        <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.student}</TableCell>
+                                        <TableCell align="center" sx={{ minWidth: 150 }}>{gradeDoc.discipline}</TableCell>
+                                        <TableCell align="center">{grade}</TableCell>
+                                        <TableCell align="center" sx={{ minWidth: 150 }}>{timestamp}</TableCell>
+                                        <TableCell align="center">{gradeDoc.document}</TableCell>
+                                        <TableCell align="center">{gradeDoc.from}</TableCell>
+                                    </TableRow>
+                                );
+                            })
+                        ) : (
+                        <TableRow>
+                    <TableCell colSpan={8} align="center">No grades available</TableCell>
+                    </TableRow>
+                    )}
+                    </TableBody>
                 </Table>
             </TableContainer>
 			<Box sx={{position: 'absolute'}}>{open && <DocumentDetail state={state} open={open} handleClose={handleClose} grade={selectedGrade} />}</Box>
