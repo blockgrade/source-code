@@ -52,19 +52,19 @@ const DocumentDetail = ({ state, open, handleClose, grade }) => {
     console.log(payload);
   };
 
-    const updateGradeInfo = async (event) => {
-        event.preventDefault();
-       
-        const { contract } = state;
-        const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
-        const transaction = await contract.updateGrade(
-            payload.id,
-            payload.student, 
-            payload.discipline, 
-            gradeValue, 
-            payload.document
-        );
-        await transaction.wait();
+  const updateGradeInfo = async (event) => {
+    event.preventDefault();
+    
+    const { contract } = state;
+    const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
+    const transaction = await contract.updateGrade(
+      payload.id,
+      payload.student, 
+      payload.discipline, 
+      gradeValue, 
+      payload.document
+    );
+    await transaction.wait();
 
     console.log("Transaction is successful");
   };
