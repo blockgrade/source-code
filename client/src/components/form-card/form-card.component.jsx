@@ -1,11 +1,13 @@
 import { Box, Stack, Typography, Divider } from "@mui/material";
 import { StyledButton } from "../styled-components/styled-button/styled-button";
 import { FormField } from "../styled-components/form-field/form-field";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ethers } from "ethers";
-import PdfUploader from "../ipfs-card/IpfsCard";
+import GradeContext from "../../context/grade.context";
 
-export const FormCard = ({ state }) => {
+export const FormCard = () => {
+  const { state, contract } = useContext(GradeContext);
+
   const [formValues, setFormValues] = useState({
     student: "",
     discipline: "",
@@ -25,8 +27,7 @@ export const FormCard = ({ state }) => {
     event.preventDefault();
     console.log("Form Submitted:", formValues);
 
-    const { contract } = state;
-    console.log(contract)
+    console.log(contract);
     const gradeValue = ethers.toBigInt(
       Math.round(parseFloat(formValues.grade) * 100)
     );
@@ -40,6 +41,7 @@ export const FormCard = ({ state }) => {
       amount
     );
     await transaction.wait();
+    window.location.reload();
     console.log("Transaction is successful");
   };
 
@@ -49,7 +51,7 @@ export const FormCard = ({ state }) => {
         backgroundColor: "#a6a2a0",
         borderRadius: 1,
         boxShadow: "1px 32px 39px -3px rgba(0,0,0,0.75);",
-        width: 'calc(45%-1rem)',
+        width: "calc(45%-1rem)",
         margin: "auto",
         paddingX: 3,
         paddingY: 5,

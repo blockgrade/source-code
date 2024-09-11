@@ -1,69 +1,22 @@
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
-import abi from "./contractJson/GradeRegistry.json";
+import { useContext } from "react";
 import "./App.css";
 import { ThemeProvider } from "@mui/material";
 
 import GradeDocuments from "./components/GradeDocuments";
-import { FormCard } from "./components/form-card/form-card";
+import { FormCard } from "./components/form-card/form-card.component";
 import { theme } from "./common/theme";
-import PdfUploader from "./components/ipfs-card/IpfsCard";
+import GradeContext from "./context/grade.context";
 
 function App() {
-  const [state, setState] = useState({
-    provider: null,
-    signer: null,
-    contract: null,
-  });
-  const [account, setAccount] = useState("Not connected");
+  const { account } = useContext(GradeContext);
 
-  useEffect(() => {
-    const template = async () => {
-      const contractAddress = "0x4cb619E5eAb4DE7530aA352E53f4a6955C2F068c";
-      const contractABI = abi.abi;
-
-      try {
-        const { ethereum } = window;
-        if (!ethereum) {
-          console.log("Ethereum object not found, install Metamask.");
-          return;
-        }
-
-        const account = await ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        window.ethereum.on("accountsChanged", () => {
-          window.location.reload();
-        });
-        setAccount(account[0]);
-
-        const provider = new ethers.BrowserProvider(ethereum);
-        const signer = await provider.getSigner();
-
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI,
-          signer
-        );
-        setState({ provider, signer, contract });
-      } catch (error) {
-        if (error.message.includes("User denied transaction")) {
-          alert("Transaction was denied by the user.");
-        } else {
-          console.error("App :: useEffect() :: Error:", error);
-          alert("An unexpected error occurred. Please check your connection.");
-        }
-      }
-    };
-    template();
-  }, []);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         Connected account: {account}
-        <div className="article" style={{display: 'flex', gap: '1rem'}}>
-          <FormCard state={state} />
-          <GradeDocuments state={state}></GradeDocuments>
+        <div className="article" style={{ display: "flex", gap: "1rem" }}>
+          <FormCard />
+          <GradeDocuments></GradeDocuments>
         </div>
       </div>
     </ThemeProvider>
