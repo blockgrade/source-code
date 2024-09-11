@@ -28,21 +28,17 @@ export const FormCard = () => {
   const handleFileChange = (file) => {
     setFormValues({
       ...formValues,
-      file
-    })
-  }
+      file,
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form Submitted:", formValues);
 
-    console.log(contract);
     const gradeValue = ethers.toBigInt(
       Math.round(parseFloat(formValues.grade) * 100)
     );
-    // incluir o arquivo
-    console.log('ou',formValues.file)
-    const file = await uploadFile(formValues.file)
+    const file = await uploadFile(formValues.file);
     const amount = { value: ethers.parseEther("0.001") };
     const transaction = await contract.submitGradeWithFee(
       formValues.student,
@@ -52,60 +48,61 @@ export const FormCard = () => {
       amount
     );
     await transaction.wait();
-    // window.location.reload();
+    window.location.reload();
     console.log("Transaction is successful");
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "#a6a2a0",
-        borderRadius: 1,
-        boxShadow: "1px 32px 39px -3px rgba(0,0,0,0.75);",
-        width: "calc(45%-1rem)",
-        margin: "auto",
-        paddingX: 3,
-        paddingY: 5,
-      }}
-    >
-      <Typography variant="h2" sx={{ color: "black" }}>
-        {"Student's grade"}
-      </Typography>
-      <Divider sx={{ marginY: 2 }} />
-      <Stack spacing={3} sx={{ width: 400, margin: "auto" }}>
-        <FormField
-          name="student"
-          label="Student"
-          color="black"
-          value={formValues.student}
-          onChange={handleChange}
-          fullWidth
-        />
-        <FormField
-          name="discipline"
-          label="Discipline"
-          color="black"
-          value={formValues.discipline}
-          onChange={handleChange}
-          fullWidth
-        />
-        <FormField
-          name="grade"
-          label="Grade"
-          color="black"
-          value={formValues.grade}
-          onChange={handleChange}
-          fullWidth
-        />
-        <PdfUploader
-          name="file"
-          onChange={handleFileChange}
-          value={formValues.file}
-        /> 
-        <StyledButton variant="contained" onClick={handleSubmit}>
-          Register
-        </StyledButton>
-      </Stack>
-    </Box>
+    <>
+      <Box
+        sx={{
+          backgroundColor: "#a6a2a0",
+          borderRadius: 1,
+          width: "calc(45%-1rem)",
+          margin: "auto",
+          paddingX: 3,
+          paddingY: 5,
+        }}
+      >
+        <Typography variant="h2" sx={{ color: "black" }}>
+          {"Student's grade"}
+        </Typography>
+        <Divider sx={{ marginY: 2 }} />
+        <Stack spacing={3} sx={{ width: 400, margin: "auto" }}>
+          <FormField
+            name="student"
+            label="Student"
+            color="black"
+            value={formValues.student}
+            onChange={handleChange}
+            fullWidth
+          />
+          <FormField
+            name="discipline"
+            label="Discipline"
+            color="black"
+            value={formValues.discipline}
+            onChange={handleChange}
+            fullWidth
+          />
+          <FormField
+            name="grade"
+            label="Grade"
+            color="black"
+            value={formValues.grade}
+            onChange={handleChange}
+            fullWidth
+          />
+          <PdfUploader
+            name="file"
+            onChange={handleFileChange}
+            value={formValues.file}
+          />
+          <StyledButton variant="contained" onClick={handleSubmit}>
+            Register
+          </StyledButton>
+        </Stack>
+      </Box>
+    </>
   );
 };

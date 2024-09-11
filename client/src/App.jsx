@@ -1,11 +1,12 @@
 import { useContext } from "react";
 import "./App.css";
-import { ThemeProvider } from "@mui/material";
+import { Chip, ThemeProvider } from "@mui/material";
 
 import GradeDocuments from "./components/GradeDocuments";
 import { FormCard } from "./components/form-card/form-card.component";
 import { theme } from "./common/theme";
 import GradeContext from "./context/grade.context";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function App() {
   const { account } = useContext(GradeContext);
@@ -13,7 +14,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        Connected account: {account}
+        <Chip
+          sx={{
+            backgroundColor: "#d3c8bb",
+            marginBottom: 2,
+            alignSelf: "flex-end",
+          }}
+          avatar={<AccountCircleIcon />}
+          label={`${account}`}
+        />
         <div className="article" style={{ display: "flex", gap: "1rem" }}>
           <FormCard />
           <GradeDocuments></GradeDocuments>
@@ -24,7 +33,6 @@ function App() {
 }
 
 export default App;
-
 
 /*
 TODO

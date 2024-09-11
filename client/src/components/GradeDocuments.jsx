@@ -49,9 +49,11 @@ const GradeDocuments = () => {
   };
 
   const handleViewDocument = () => {
-    window.open(`https://gold-far-raven-8.mypinata.cloud/ipfs/${selectedGrade.document}`)
-    handleMenuClose()
-  }
+    window.open(
+      `https://gold-far-raven-8.mypinata.cloud/ipfs/${selectedGrade.document}`
+    );
+    handleMenuClose();
+  };
 
   useEffect(() => {
     contract && getGradesList();
@@ -61,13 +63,23 @@ const GradeDocuments = () => {
     <>
       <TableContainer
         component={Paper}
-        sx={{ width: "calc(65%-1rem)", backgroundColor: "#a6a2a0" }}
+        sx={{
+          width: "calc(65%-1rem)",
+          backgroundColor: "#a6a2a0",
+          maxHeight: 650,
+        }}
       >
         <Table className="table-content" aria-label="simple table">
           <TableHead
-            sx={{ backgroundColor: "#1f222e", borderBottomColor: "#1f222e" }}
+            sx={{
+              backgroundColor: "#1f222e",
+              borderBottomColor: "#1f222e",
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
+            }}
           >
-            <TableRow>
+            <TableRow sx={{ position: "sticky" }}>
               <TableCell sx={{ color: "white" }} align="center"></TableCell>
               <TableCell sx={{ color: "white" }} align="center">
                 Student
@@ -135,7 +147,8 @@ const GradeDocuments = () => {
                           <HistoryIcon sx={{ marginRight: 1 }} /> History
                         </MenuItem>
                         <MenuItem onClick={handleViewDocument}>
-                          <ArticleIcon sx={{ marginRight: 1 }}/> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
+                          <ArticleIcon sx={{ marginRight: 1 }} /> View Document{" "}
+                          {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
                         </MenuItem>
                         <MenuItem onClick={() => handleOpen()}>
                           <EditIcon sx={{ marginRight: 1 }} /> Update

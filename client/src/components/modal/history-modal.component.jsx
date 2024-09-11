@@ -18,6 +18,7 @@ import React, { useContext, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import GradeContext from "../../context/grade.context";
 import { ethers } from "ethers";
+import { StyledButton } from "../styled-components/styled-button/styled-button";
 
 const style = {
   position: "relative",
@@ -35,7 +36,7 @@ export const HistoryModal = ({ open, handleClose }) => {
 
   const handleViewDocument = (document) => {
     const url = `https://gold-far-raven-8.mypinata.cloud/ipfs/${document}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   return (
@@ -82,9 +83,7 @@ export const HistoryModal = ({ open, handleClose }) => {
                 }}
               >
                 <TableRow>
-                  <TableCell sx={{ color: "white" }} align="center">
-                    
-                  </TableCell>
+                  <TableCell sx={{ color: "white" }} align="center"></TableCell>
                   <TableCell sx={{ color: "white" }} align="center">
                     Student
                   </TableCell>
@@ -119,16 +118,18 @@ export const HistoryModal = ({ open, handleClose }) => {
                         key={index}
                         sx={{
                           color: "#1F222E51",
-                          "&:hover": {
-                            backgroundColor: "#1F222E51",
-                            color: "white",
-                            cursor: "pointer",
-                          },
                         }}
                       >
-                        <TableCell><MenuItem onClick={() => handleViewDocument(grade.document)}>
-                          <ArticleIcon sx={{ marginRight: 1 }}/> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
-                        </MenuItem></TableCell>
+                        <TableCell>
+                          <MenuItem
+                            onClick={() => handleViewDocument(grade.document)}
+                          >
+                            <StyledButton>
+                              <ArticleIcon sx={{ marginRight: 1 }} /> View
+                              Document
+                            </StyledButton>
+                          </MenuItem>
+                        </TableCell>
                         <TableCell>{grade.student}</TableCell>
                         <TableCell>{grade.discipline}</TableCell>
                         <TableCell>{gradeNumber}</TableCell>

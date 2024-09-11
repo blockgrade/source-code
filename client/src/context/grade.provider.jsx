@@ -14,7 +14,7 @@ export const GradeProvider = ({ children }) => {
   const [gradeHistory, setGradeHistory] = useState();
 
   const connectToContract = async () => {
-    const contractAddress = "0x080409b66603fDd783EacECE5DdA5691f799f919";
+    const contractAddress = "0x478f8451ba3857bbbC23d8F539272b545957d6dE";
     const contractABI = abi.abi;
 
     try {
