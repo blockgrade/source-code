@@ -1,11 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import {
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { IconButton, Stack, TextField, Typography } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import CloseIcon from "@mui/icons-material/Close";
@@ -35,24 +30,24 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
   });
 
   useEffect(() => {
-    console.log('Form values updated:', formValues);
-}, [formValues]);
+    console.log("Form values updated:", formValues);
+  }, [formValues]);
 
-const handleChange = (event) => {
-  const { name, value } = event.target;
-  setFormValues(prevValues => ({
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
-  }));
-};
+    }));
+  };
 
-const handleFileChange = (file) => {
-  console.log('File received in DocumentDetail:', file);
-  setFormValues(prevValues => ({
+  const handleFileChange = (file) => {
+    console.log("File received in DocumentDetail:", file);
+    setFormValues((prevValues) => ({
       ...prevValues,
       file,
-  }));
-};
+    }));
+  };
 
   const updateGrade = async (event) => {
     event.preventDefault();
@@ -61,8 +56,8 @@ const handleFileChange = (file) => {
     const gradeValue = ethers.toBigInt(
       Math.round(parseFloat(formValues.grade) * 100)
     );
-    console.log('aquir', fileGlobal)
-    const file = await uploadFile(fileGlobal)
+    console.log("aquir", fileGlobal);
+    const file = await uploadFile(fileGlobal);
     const transaction = await contract.updateGrade(
       formValues.id,
       formValues.student,
@@ -71,7 +66,7 @@ const handleFileChange = (file) => {
       file
     );
     await transaction.wait();
-    // window.location.reload();
+    window.location.reload();
     console.log("Transaction is successful");
   };
 
@@ -136,10 +131,7 @@ const handleFileChange = (file) => {
                 value={formValues.grade}
                 onChange={handleChange}
               />
-              <PdfUploader 
-                name="fileUpdate"
-                onChange={handleFileChange}
-              />
+              <PdfUploader name="fileUpdate" onChange={handleFileChange} />
               <StyledButton
                 variant="contained"
                 sx={{ padding: "12px" }}
