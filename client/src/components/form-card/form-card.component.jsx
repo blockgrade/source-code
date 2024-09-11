@@ -4,6 +4,7 @@ import { FormField } from "../styled-components/form-field/form-field";
 import { useContext, useState } from "react";
 import { ethers } from "ethers";
 import GradeContext from "../../context/grade.context";
+import PdfUploader from "../ipfs-card/IpfsCard";
 
 export const FormCard = () => {
   const { state, contract } = useContext(GradeContext);
@@ -31,7 +32,7 @@ export const FormCard = () => {
     const gradeValue = ethers.toBigInt(
       Math.round(parseFloat(formValues.grade) * 100)
     );
-
+    // incluir o arquivo
     const amount = { value: ethers.parseEther("0.001") };
     const transaction = await contract.submitGradeWithFee(
       formValues.student,

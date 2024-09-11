@@ -130,7 +130,7 @@ const GradeDocuments = () => {
                           <HistoryIcon sx={{ marginRight: 1 }} /> History
                         </MenuItem>
                         <MenuItem onClick={handleMenuClose}>
-                          <ArticleIcon sx={{ marginRight: 1 }} /> View Document
+                          <ArticleIcon sx={{ marginRight: 1 }} /> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
                         </MenuItem>
                         <MenuItem onClick={() => handleOpen()}>
                           <EditIcon sx={{ marginRight: 1 }} /> Update
