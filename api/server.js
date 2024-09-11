@@ -31,6 +31,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
             body: form,
         });
         const result = await response.json();
+        console.log(result)
         res.send(result);
     } catch (error) {
         console.error('Error:', error);

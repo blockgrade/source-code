@@ -47,13 +47,13 @@ contract GradeRegistry {
         Grade storage currentGrade = grades[findGradeIndex(gradeId)];
         require(currentGrade.from == msg.sender, "You can only update your own grades");
 
-        gradeHistories[gradeId].versions.push(currentGrade);
-
         currentGrade.student = student;
         currentGrade.discipline = discipline;
         currentGrade.grade = gradeValue;
         currentGrade.document = document;
         currentGrade.timestamp = block.timestamp;
+
+        gradeHistories[gradeId].versions.push(currentGrade);
     }
 
     function findGradeIndex(bytes32 gradeId) private view returns (uint) {

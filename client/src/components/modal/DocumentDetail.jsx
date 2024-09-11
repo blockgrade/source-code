@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import {
-  Button,
   IconButton,
   Stack,
   TextField,
@@ -13,7 +12,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { StyledButton } from "../styled-components/styled-button/styled-button";
 import GradeContext from "../../context/grade.context";
 import PdfUploader from "../ipfs-card/IpfsCard";
-
+import uploadFile from "../../../utils/uploadFile";
+import { fileGlobal } from "../ipfs-card/IpfsCard";
 const style = {
   position: "relative",
   width: "50%",
@@ -26,56 +26,52 @@ const style = {
 
 const DocumentDetail = ({ open, handleClose, grade }) => {
   const { state, contract } = useContext(GradeContext);
-  const [payload, setPayload] = useState({
-    id: "",
-    student: "",
-    discipline: "",
-    grade: "",
-    document: "",
+  const [formValues, setFormValues] = useState({
+    id: grade.id,
+    student: grade.student || "",
+    discipline: grade.discipline || "",
+    grade: ethers.formatUnits(grade.grade, 0) / 100 || "",
+    file: "",
   });
 
   useEffect(() => {
-    if (grade)
-      setPayload({
-        id: grade.id,
-        student: grade.student || "",
-        discipline: grade.discipline || "",
-        grade: ethers.formatUnits(grade.grade, 0) / 100 || "",
-        document: grade.document || "",
-      });
-  }, [grade]);
+    console.log('Form values updated:', formValues);
+}, [formValues]);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setPayload({ ...payload, [name]: value });
-  };
+const handleChange = (event) => {
+  const { name, value } = event.target;
+  setFormValues(prevValues => ({
+      ...prevValues,
+      [name]: value,
+  }));
+};
 
-  const handleSubmit = (event) => {
+const handleFileChange = (file) => {
+  console.log('File received in DocumentDetail:', file);
+  setFormValues(prevValues => ({
+      ...prevValues,
+      file,
+  }));
+};
+
+  const updateGrade = async (event) => {
     event.preventDefault();
-    console.log(payload);
-  };
+    console.log("Payload before submission:", formValues);
 
-  const handleFileChange = (file) => {
-    setFormValues({
-      ...formValues,
-      file
-    })
-  }
-
-  const updateGradeInfo = async (event) => {
-    event.preventDefault();
-    
-    const { contract } = state;
-    const gradeValue = ethers.toBigInt(Math.round(parseFloat(payload.grade) * 100));
+    const gradeValue = ethers.toBigInt(
+      Math.round(parseFloat(formValues.grade) * 100)
+    );
+    console.log('aquir', fileGlobal)
+    const file = await uploadFile(fileGlobal)
     const transaction = await contract.updateGrade(
-      payload.id,
-      payload.student, 
-      payload.discipline, 
-      gradeValue, 
-      payload.document
+      formValues.id,
+      formValues.student,
+      formValues.discipline,
+      gradeValue,
+      file
     );
     await transaction.wait();
-
+    // window.location.reload();
     console.log("Transaction is successful");
   };
 
@@ -111,7 +107,7 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
           >
             Update student
           </Typography>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={updateGrade}>
             <Stack gap={2}>
               <TextField
                 required
@@ -119,7 +115,7 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
                 label="Student"
                 name="student"
                 sx={{ backgroundColor: "#f5e8da" }}
-                value={payload.student}
+                value={formValues.student}
                 onChange={handleChange}
               />
               <TextField
@@ -128,7 +124,7 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
                 label="Discipline"
                 name="discipline"
                 sx={{ backgroundColor: "#f5e8da" }}
-                value={payload.discipline}
+                value={formValues.discipline}
                 onChange={handleChange}
               />
               <TextField
@@ -137,19 +133,17 @@ const DocumentDetail = ({ open, handleClose, grade }) => {
                 label="Grade"
                 name="grade"
                 sx={{ backgroundColor: "#f5e8da" }}
-                value={payload.grade}
+                value={formValues.grade}
                 onChange={handleChange}
               />
               <PdfUploader 
-                name="file"
+                name="fileUpdate"
                 onChange={handleFileChange}
-                value={payload.file}
               />
               <StyledButton
                 variant="contained"
                 sx={{ padding: "12px" }}
                 type="submit"
-                onClick={updateGradeInfo}
               >
                 Update
               </StyledButton>

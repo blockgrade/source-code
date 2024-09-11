@@ -41,6 +41,7 @@ export const FormCard = () => {
       Math.round(parseFloat(formValues.grade) * 100)
     );
     // incluir o arquivo
+    console.log('ou',formValues.file)
     const file = await uploadFile(formValues.file)
     const amount = { value: ethers.parseEther("0.001") };
     const transaction = await contract.submitGradeWithFee(

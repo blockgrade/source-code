@@ -1,4 +1,5 @@
 const uploadFile = async (file) => {
+    console.log('fileAQUI',file)
     if (!file) {
         alert("Please select a file to upload");
         return;
@@ -6,7 +7,7 @@ const uploadFile = async (file) => {
     try {
         const formData = new FormData();
         formData.append("file", file);
-        console.log('file',file)
+        
         const response = await fetch("http://localhost:4000/upload", { method: "POST", body: formData });
         if (response.ok) {
             const result = await response.json();

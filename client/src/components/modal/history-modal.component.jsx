@@ -5,6 +5,7 @@ import {
   IconButton,
   Modal,
   Table,
+  MenuItem,
   TableBody,
   TableCell,
   TableContainer,
@@ -12,6 +13,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import ArticleIcon from "@mui/icons-material/Article";
 import React, { useContext, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import GradeContext from "../../context/grade.context";
@@ -30,6 +32,11 @@ const style = {
 
 export const HistoryModal = ({ open, handleClose }) => {
   const { gradeHistory } = useContext(GradeContext);
+
+  const handleViewDocument = (document) => {
+    const url = `https://gold-far-raven-8.mypinata.cloud/ipfs/${document}`;
+    window.open(url, '_blank');
+  };
 
   return (
     <div>
@@ -76,6 +83,9 @@ export const HistoryModal = ({ open, handleClose }) => {
               >
                 <TableRow>
                   <TableCell sx={{ color: "white" }} align="center">
+                    
+                  </TableCell>
+                  <TableCell sx={{ color: "white" }} align="center">
                     Student
                   </TableCell>
                   <TableCell sx={{ color: "white" }} align="center">
@@ -116,6 +126,9 @@ export const HistoryModal = ({ open, handleClose }) => {
                           },
                         }}
                       >
+                        <TableCell><MenuItem onClick={() => handleViewDocument(grade.document)}>
+                          <ArticleIcon sx={{ marginRight: 1 }}/> View Document  {/** colocar isso como herf https://gold-far-raven-8.mypinata.cloud/ipfs/${gradeDoc.documet} */}
+                        </MenuItem></TableCell>
                         <TableCell>{grade.student}</TableCell>
                         <TableCell>{grade.discipline}</TableCell>
                         <TableCell>{gradeNumber}</TableCell>
