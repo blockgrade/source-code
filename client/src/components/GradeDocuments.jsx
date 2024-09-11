@@ -15,13 +15,13 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import HistoryIcon from "@mui/icons-material/History";
 import ArticleIcon from "@mui/icons-material/Article";
 import EditIcon from "@mui/icons-material/Edit";
-import { HistoryModal } from "./modal/history-modal";
+import { HistoryModal } from "./modal/history-modal.component";
 import GradeContext from "../context/grade.context";
 
 const GradeDocuments = () => {
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const { state, gradeDocument, getGradesList, contract } =
+  const { state, gradeDocument, getGradesList, contract, getGradeHistory } =
     useContext(GradeContext);
 
   const [documentModalOpen, setDocumentModalOpenOpen] = useState(false);
@@ -29,12 +29,14 @@ const GradeDocuments = () => {
 
   const handleOpen = () => {
     handleMenuClose();
-    // setSelectedGrade(gradeDoc);
     setDocumentModalOpenOpen(true);
   };
   const handleClose = () => setDocumentModalOpenOpen(false);
 
+  const handleHistoryModalClose = () => setHistoryModalOpen(false);
+
   const handleHistoryModal = () => {
+    getGradeHistory(selectedGrade[0]);
     setHistoryModalOpen(true);
   };
 
@@ -102,7 +104,9 @@ const GradeDocuments = () => {
                       }),
                     }}
                   >
-                    <TableCell>
+                    <TableCell
+                      sx={{ minWidth: 150, borderBottomColor: "#1f222e" }}
+                    >
                       <StyledButton
                         onClick={(event) => handleMenuClick(event, gradeDoc)}
                         sx={{ width: 50, height: 50 }}
@@ -122,7 +126,7 @@ const GradeDocuments = () => {
                           horizontal: "right",
                         }}
                       >
-                        <MenuItem onClick={handleMenuClose}>
+                        <MenuItem onClick={handleHistoryModal}>
                           <HistoryIcon sx={{ marginRight: 1 }} /> History
                         </MenuItem>
                         <MenuItem onClick={handleMenuClose}>
@@ -191,7 +195,12 @@ const GradeDocuments = () => {
           />
         )}
 
-        {historyModalOpen && <HistoryModal />}
+        {historyModalOpen && (
+          <HistoryModal
+            open={historyModalOpen}
+            handleClose={handleHistoryModalClose}
+          />
+        )}
       </Box>
     </>
   );

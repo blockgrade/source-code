@@ -3,7 +3,7 @@ import "./App.css";
 import { ThemeProvider } from "@mui/material";
 
 import GradeDocuments from "./components/GradeDocuments";
-import { FormCard } from "./components/form-card/form-card";
+import { FormCard } from "./components/form-card/form-card.component";
 import { theme } from "./common/theme";
 import PdfUploader from "./components/ipfs-card/IpfsCard";
 import GradeContext from "./context/grade.context";

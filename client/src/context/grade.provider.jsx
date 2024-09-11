@@ -11,6 +11,7 @@ export const GradeProvider = ({ children }) => {
   });
   const [account, setAccount] = useState("Not connected");
   const [gradeDocument, setGradeDocument] = useState([]);
+  const [gradeHistory, setGradeHistory] = useState();
 
   const connectToContract = async () => {
     const contractAddress = "0x961Cd3923C28834BC07BbAAae8d82a29a87cDf3B";
@@ -57,7 +58,7 @@ export const GradeProvider = ({ children }) => {
 
   const getGradeHistory = async (gradeId) => {
     const gradeHistory = await state.contract.getGradeHistory(gradeId);
-    console.log(gradeHistory);
+    setGradeHistory(gradeHistory);
   };
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export const GradeProvider = ({ children }) => {
         gradeDocument,
         getGradesList,
         getGradeHistory,
+        gradeHistory,
         contract: state.contract,
       }}
     >
