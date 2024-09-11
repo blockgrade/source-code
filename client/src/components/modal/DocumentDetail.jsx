@@ -7,10 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ethers } from "ethers";
 import CloseIcon from "@mui/icons-material/Close";
 import { StyledButton } from "../styled-components/styled-button/styled-button";
+import GradeContext from "../../context/grade.context";
 
 const style = {
   position: "relative",
@@ -22,14 +23,15 @@ const style = {
   backgroundColor: "#d3c8bb",
 };
 
-const DocumentDetail = ({ state, open, handleClose, grade }) => {
-    const [payload, setPayload] = useState({
-        'id': '',
-        'student': '', 
-        'discipline': '', 
-        'grade': '', 
-        'document': ''
-    });
+const DocumentDetail = ({ open, handleClose, grade }) => {
+  const { state, contract } = useContext(GradeContext);
+  const [payload, setPayload] = useState({
+    id: "",
+    student: "",
+    discipline: "",
+    grade: "",
+    document: "",
+  });
 
   useEffect(() => {
     if (grade)
