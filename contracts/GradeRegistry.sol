@@ -3,10 +3,17 @@ pragma solidity ^0.8.24;
 
 contract GradeRegistry {
 
+    struct Student {
+        address account;
+        string name;
+        string enrollmentNumber;
+    }
+
     struct Grade {
         bytes32 id; 
-        string student;
+        Student student;
         string discipline;
+        string gradeType;
         uint grade;
         uint timestamp;
         string document;
@@ -19,20 +26,17 @@ contract GradeRegistry {
 
     Grade[] public grades;
     mapping(bytes32 => GradeHistory) private gradeHistories;
-    address payable owner;
+    address owner;
 
     constructor() {
-        owner = payable(msg.sender);
+        owner = msg.sender;
     }
 
     function generateId(string memory student, string memory discipline, uint grade, string calldata document, address from, uint timestamp) private pure returns (bytes32) {
         return keccak256(abi.encodePacked(student, discipline, grade, document, from, timestamp));
     }
 
-    function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, string calldata document) external payable {
-        require(msg.value > 0, 'Please pay more than 0 ether');
-        owner.transfer(msg.value);
-
+    function submitGradeWithFee(string calldata student, string calldata discipline, uint grade, string calldata document) external {
         uint timestamp = block.timestamp;
         bytes32 gradeId = generateId(student, discipline, grade, document, msg.sender, timestamp);
 
